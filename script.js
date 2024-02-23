@@ -1,29 +1,50 @@
-let playerChoice, computerChoice;
+let playerScore = 0, computerScore = 0;
 const choice = [`rock`, `paper`, `scissors`];
 
-function getPlayerChoice() {
-    let temp = prompt("Rock, paper or scissors?");
-    temp = temp.trim();
-    return temp.toLowerCase();
-}
+const gameButtons = document.querySelector('.gameButtons');
+let resultText = document.querySelector('#resultText');
 
-function play() {
+gameButtons.addEventListener('click', (event) => {
+    event.stopPropagation();
+  switch (event.target) {
+    case document.querySelector('.rock'): 
+    playRound('rock');
+    break;
+    case document.querySelector('.paper'):
+    playRound('paper');
+    break;
+    case document.querySelector('.scissors'):
+    playRound('scissors');
+    break;
+  }
+});
 
-    playerChoice = getPlayerChoice();
-    computerChoice = choice[Math.floor(Math.random() * choice.length)]
+function playRound(playerSelection) {
 
-    if ((playerChoice === `paper` && computerChoice === `rock`) ||
-        (playerChoice === `scissors` && computerChoice === `paper`) ||
-        (playerChoice === `rock` && computerChoice === `scissors`)) {
-        console.log("Player won");
+    if(playerScore < 5 && computerScore < 5) {
+
+    let computerSelection = choice[Math.floor(Math.random() * choice.length)]
+
+    if (
+        ((playerSelection === `paper` && computerSelection === `rock`) ||
+        (playerSelection === `scissors` && computerSelection === `paper`)) ||
+        (playerSelection === `rock` && computerSelection === `scissors`)) {
+        playerScore += 1;
     }
-    else if (playerChoice === computerChoice) console.log("draw");
-    else console.log("PC won");
+    else if (playerSelection === computerSelection) console.log('');
+    else computerScore += 1;
+
+    resultText.textContent = `You ${playerScore} : PC ${computerScore}`;
 }
 
-play();
+else if (playerScore === 5 || computerScore === 5) {    
+    alert((playerScore > computerScore) ? "Player won" : "PC won");
+    endGame();
+}
+}
 
-
-
-
-
+function endGame() {
+    playerScore = 0;
+    computerScore = 0;
+    resultText.textContent = '';
+}
